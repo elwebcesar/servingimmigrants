@@ -1,0 +1,168 @@
+$menu_background: $white;
+$menu_breakpoint : map-get($breakpoints, lg);
+$menu_toggle_background: $green-logo;
+$menu_border: 1px solid rgba(255,255,255,0.1);
+$menu_padding: .5rem 1rem;
+$menu_icon_padding: .6rem .8rem;
+
+@keyframes grow {
+    0% {
+      display: none;
+      opacity: 0;
+    }
+    50% {
+      display: block;
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+@mixin show () {
+    display: block;
+    animation: grow .2s ease-in-out;
+}
+
+@mixin hide () {
+    display: none;
+}
+
+
+.menu {
+    background-color: $menu_background;
+
+    & input[type="checkbox"], & .menu-dropdown {
+        @include hide;
+    }
+
+    & ul {
+        margin: 0; 
+        padding: 0; 
+        list-style: none;
+    }
+
+    & > ul {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+    }
+
+    & a {
+        display: flex;
+        align-items: center;
+        color: $green-logo;
+        font-weight: 600;
+    }
+
+    & .menu-dropdown a {
+        padding: $menu_padding;
+        border-bottom: $menu_border;
+    }  
+}
+
+@media screen and (min-width: ($menu_breakpoint + 1)) {
+    .menu {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+
+        & > label, & input[type="checkbox"] {
+          @include hide;
+        }
+
+        & a {
+            padding: $menu_padding;
+
+            & i {
+                padding-left: .3rem;
+                font-size: 1.1rem;
+            }
+        }
+
+        & > ul > li {
+            display: inline-block;
+        }
+
+        & .menu-hasdropdown {
+            position: relative;
+
+            &:hover {
+              > ul {
+                @include show;
+              }
+            }
+
+            & > ul {
+                position: absolute;
+                top:100%;
+                left: 0;
+                width: 18rem;
+                background: $menu_background;
+
+                & li:not(:last-child) {
+                    border-bottom: 1px solid darken($gray,15%);
+                }
+            }
+        }
+
+        & .menu-hasflyout {
+            & > ul {
+                left: 100%;
+                top:0;
+            }
+
+            & .menu-downicon {
+                @include hide;
+            }
+        }  
+    }
+}
+
+@media screen and (max-width: $menu_breakpoint) {
+    .menu {
+        & > label {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: block;
+            padding: $menu_padding;
+            color: $white;
+            text-align: right;
+            background: $menu_toggle_background;
+            border-radius: .4rem;
+        }
+
+        & input[type="checkbox"]:checked + ul {
+            @include show;
+        }
+
+        & a {
+            justify-content: space-between;
+            padding: 1rem 0;
+        }
+
+        & li:not(:last-child) {
+            border-bottom: 1px solid darken($gray,15%);
+        }
+
+        & > ul, & .menu-righticon {
+          @include hide;
+        }
+        
+        & > ul i {
+            float: right;
+            padding: $menu_icon_padding;
+            background-color: darken($menu_background,15%);
+            border-radius: .4rem;
+        }
+
+        & .menu-dropdown  a {
+            background: darken($menu_background,2%);
+        }
+
+        & .menu-hasflyout > ul a {
+            background: darken($menu_background,10%);
+        }
+    }
+}
